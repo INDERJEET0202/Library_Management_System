@@ -114,6 +114,7 @@ export default {
         })
         .then((response) => {
           console.log("Response from Flask backend:", response.data.message);
+          this.$router.push('/userlogin');
         })
         .catch((error) => {
           if (error.response && error.response.status === 400) {

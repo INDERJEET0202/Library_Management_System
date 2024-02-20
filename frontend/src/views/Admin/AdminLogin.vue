@@ -1,8 +1,7 @@
 <template>
   <div>
-    <AuthNavbar />
     <div class="container">
-      <h1 class="header">User Login</h1>
+      <h1 class="header">Admin Login</h1>
       <form @submit.prevent="loginUser">
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label"
@@ -15,9 +14,6 @@
             aria-describedby="emailHelp"
             v-model="email"
           />
-          <small id="emailHelp" class="form-text">
-            We'll never share your email with anyone else.
-          </small>
         </div>
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -31,56 +27,45 @@
         <div class="button">
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
-        <div class="dont-have-account">
-          <small class="mt-3">
-            Don't have an account?
-            <router-link to="/usersignup">Signup</router-link>
-          </small>
-        </div>
         <div class="error-message" v-if="errorMessage">{{ errorMessage }}</div>
       </form>
     </div>
   </div>
 </template>
-  
-  <script>
-import AuthNavbar from "../../components/AuthNavbar/AuthNavbar.vue";
-import axios from "axios";
 
+<script>
+import axios from "axios";
 export default {
-  name: "UserLogin",
-  components: {
-    AuthNavbar,
-  },
-  data() {
+  name: "AdminLogin",
+  data(){
     return {
       email: "",
       password: "",
       errorMessage: "",
-    };
+    }
   },
   methods: {
-    async loginUser() {
-      try {
-        const response = await axios.post("http://127.0.0.1:5000/api/login", {
-          email: this.email,
-          password: this.password,
-        });
-        if (response.data.access_token) {
-          localStorage.setItem('accessToken', response.data.access_token);
-          this.$router.push('/user/dashboard');
-          console.log(response.data.message);
+    async loginUser(){
+        try{
+            const response = await axios.post("http://127.0.0.1:5000/api/admin/login", {
+                email: this.email,
+                password: this.password,
+            });
+            if(response.data.access_token){
+                localStorage.setItem("accessToken", response.data.access_token);
+                localStorage.setItem("admin_name", response.data.admin_name);
+                this.$router.push("/admin/dashboard");
+            }
+            } catch (error) {
+            console.error("Error in logging in", error);
+            this.errorMessage = error.response.data.error;
         }
-      } catch (error) {
-        console.error("Error logging in:", error);
-        this.errorMessage = error.response.data.error;
-      }
-    },
-  },
+    }
+  }
 };
 </script>
-  
-  <style scoped>
+
+<style>
 .container {
   width: 40%;
   margin-top: 50px;
@@ -112,13 +97,6 @@ export default {
 }
 
 .button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.dont-have-account {
   display: flex;
   align-items: center;
   justify-content: center;

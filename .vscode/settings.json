@@ -3,6 +3,11 @@
         "axios",
         "bcryptjs",
         "dompurify",
-        "dont"
+        "dont",
+        "jsonify",
+        "lastrowid",
+        "librarianlogin",
+        "userlogin",
+        "usersignup"
     ]
 }
