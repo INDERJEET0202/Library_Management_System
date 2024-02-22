@@ -53,6 +53,7 @@ export default {
   methods:{
     logout(){
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
         this.$router.push('/userlogin');
     }
   }

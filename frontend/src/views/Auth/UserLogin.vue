@@ -68,6 +68,7 @@ export default {
         });
         if (response.data.access_token) {
           localStorage.setItem('accessToken', response.data.access_token);
+          localStorage.setItem('user', JSON.stringify(response.data.userName));
           this.$router.push('/user/dashboard');
           console.log(response.data.message);
         }

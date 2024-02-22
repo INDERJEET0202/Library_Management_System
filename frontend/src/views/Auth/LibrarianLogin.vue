@@ -63,6 +63,7 @@ export default {
         .then((response) => {
           const { access_token } = response.data;
           localStorage.setItem("accessToken", access_token);
+          localStorage.setItem("userType", "librarian");
           console.log(
             "Librarian logged in successfully.",
           );

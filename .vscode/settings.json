@@ -8,6 +8,7 @@
         "jsonify",
         "lastrowid",
         "librarianlogin",
+        "requestedbooks",
         "userlogin",
         "usersignup",
         "viewsection"

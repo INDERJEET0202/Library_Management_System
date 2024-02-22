@@ -10,6 +10,7 @@
         </div>
         <div class="button">
           <button
+            v-if="book.allocated !== 1"
             type="button"
             class="btn"
             :class="{ 'btn-warning': book.requested === 1 }"
@@ -17,11 +18,13 @@
           >
             {{ book.requested === 1 ? 'Already Requested' : 'Request' }}
           </button>
+          <span v-else>Already Allocated</span>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 
 <script>
@@ -120,5 +123,12 @@ export default {
 .btn-warning {
   background-color: rgba(255, 221, 0, 0.719);
   color: black;
+  pointer-events: none; 
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-warning:hover {
+  background-color: rgba(255, 221, 0, 0.9);
 }
 </style>

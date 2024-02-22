@@ -11,6 +11,8 @@ import LibrarianDashboard from "../views/Dashboard/LibrarianDashboard.vue"
 import SectionPage from "../views/Sections/SectionPage.vue"
 import AllBooks from "../components/User/AllBooks.vue"
 import MyBooks from "../components/User/MyBooks.vue"
+import BooksRequested from "../views/Librarian/BooksRequested.vue"
+import AllocatedBooks from "../views/Librarian/AllocatedBooks.vue"
 
 const routes = [
     {
@@ -87,8 +89,9 @@ const routes = [
         },
         beforeEnter: (to, from, next) => {
             const accessToken = localStorage.getItem('accessToken');
-            if (!accessToken) {
-                next({ name: 'UserLogin' });
+            const user = localStorage.getItem('user');
+            if (!accessToken || !user) {
+                next({ name: 'Home' });
             } else {
                 next();
             }
@@ -134,7 +137,8 @@ const routes = [
         },
         beforeEnter: (to, from, next) => {
             const accessToken = localStorage.getItem('accessToken');
-            if (!accessToken) {
+            const role = localStorage.getItem('userType');
+            if (!accessToken || role !== "librarian") {
                 next({ name: 'Home' });
             } else {
                 next();
@@ -158,6 +162,40 @@ const routes = [
             }
         }
     },
+    {
+        path: "/librarian/dashboard/requestedbooks",
+        name: "BooksRequested",
+        component: BooksRequested,
+        meta: {
+            title: "Requested Books | LMS"
+        },
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            const role = localStorage.getItem('userType');
+            if (!accessToken || role !== "librarian") {
+                next({ name: 'Home' });
+            } else {
+                next();
+            }
+        }
+    },
+    {
+        path: "/librarian/dashboard/allocatedbooks",
+        name: "AllocatedBooks",
+        component: AllocatedBooks,
+        meta: {
+            title: "Allocated Books | LMS"
+        },
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            const role = localStorage.getItem('userType');
+            if (!accessToken || role !== "librarian") {
+                next({ name: 'Home' });
+            } else {
+                next();
+            }
+        }
+    }
 ]
 
 const router = createRouter({
