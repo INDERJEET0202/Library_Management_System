@@ -5,12 +5,14 @@
           <router-link to="/librarian/dashboard" class="nav-link">Librarian Dashboard</router-link>
         <router-link to="/librarian/dashboard/requestedbooks" class="nav-link">Requested Books</router-link>
         <router-link to="/librarian/dashboard/allocatedbooks" class="nav-link">Allocated Books</router-link>
+        <router-link to="/librarian/dashboard/availaiblebooks" class="nav-link">Availaible Books</router-link>
+        <router-link to="/librarian/dashboard/stats" class="nav-link">Stats</router-link>
         </div>
         <button class="btn btn-outline-danger" @click="logout">Logout</button>
       </div>
     </nav>
 </template>
-
+ 
 <script>
 export default {
   name: "LibrarianNavbar",
@@ -28,6 +30,6 @@ export default {
 .elements{
     display: flex;
     justify-content: space-between;
-    gap: 15px;
+    gap: 30px;
 }
 </style>

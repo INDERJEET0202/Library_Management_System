@@ -27,7 +27,9 @@
                       <td>
                         <button
                           class="btn btn-danger mw-100"
-                          @click="revokeAccess(book.allocation_id)"
+                          @click="
+                            revokeAccess(book.allocation_id, book.book_id, book.user_id)
+                          "
                         >
                           Revoke
                         </button>
@@ -49,6 +51,7 @@
   
   <script>
 import LibrarianNavbar from "../../components/LibrarianNavbar/LibrarianNavbar.vue";
+import axios from "axios";
 export default {
   name: "AllocatedBooks",
   components: {
@@ -85,8 +88,31 @@ export default {
         console.error("Error:", error.message);
       }
     },
-    revokeAccess(allocation_id) {
-      console.log("Revoke access for allocation_id:", allocation_id);
+    async revokeAccess(allocation_id, book_id, user_id) {
+      // console.log("Revoke access for allocation_id:", allocation_id, "book_id:", book_id);
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:5000/api/revoke/book",
+          {
+            allocation_id: allocation_id,
+            book_id: book_id,
+            user_id: user_id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          console.log("Book returned successfully");
+          this.getAllocatedBooks();
+        } else {
+          console.error("Failed to return the book");
+        }
+      } catch (error) {
+        console.error("Error returning the book:", error);
+      }
     },
   },
 };

@@ -667,7 +667,13 @@ def fetch_my_books():
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute('''
-            SELECT books.id AS book_id, books.name AS book_title, books.authors AS author, sections.name AS section, books_allocation.id AS allocation_id, books_allocation.user_id AS user_id
+            SELECT books.id AS book_id, 
+                   books.name AS book_title, 
+                   books.authors AS author, 
+                   books.content AS content,
+                   sections.name AS section, 
+                   books_allocation.id AS allocation_id, 
+                   books_allocation.user_id AS user_id
             FROM books_allocation
             INNER JOIN books ON books_allocation.book_id = books.id
             INNER JOIN sections ON books_allocation.section_id = sections.id
@@ -683,6 +689,7 @@ def fetch_my_books():
                     'book_id': book['book_id'],
                     'book_title': book['book_title'],
                     'author': book['author'],
+                    'content': book['content'],
                     'section': book['section'],
                     'allocation_id': book['allocation_id'],
                     'userId': book['user_id'] 
@@ -691,6 +698,7 @@ def fetch_my_books():
         return jsonify(books_list), 200
     except Exception as e:
         return jsonify({"error": "An error occurred while fetching books: " + str(e)}), 500
+
 
 
 @app.route('/api/return/book', methods=['POST'])
@@ -705,7 +713,6 @@ def return_book():
     cursor = conn.cursor()
 
     try:
-        # Delete the allocation record
         cursor.execute('''
             DELETE FROM books_allocation WHERE id = ? AND user_id = ?
         ''', (allocation_id, current_user_id))
@@ -794,6 +801,8 @@ def get_allocated_books():
             cursor = conn.cursor()
             cursor.execute('''
                 SELECT ba.id AS allocation_id,
+                       ba.book_id,
+                       ba.user_id,
                        users.name AS user_name,
                        books.name AS book_name,
                        sections.name AS section_name
@@ -810,6 +819,8 @@ def get_allocated_books():
             for book in allocated_books:
                 allocated_books_list.append({
                     'allocation_id': book['allocation_id'],
+                    'book_id': book['book_id'],
+                    'user_id': book['user_id'],
                     'user_name': book['user_name'],
                     'book_name': book['book_name'],
                     'section_name': book['section_name']
@@ -820,6 +831,7 @@ def get_allocated_books():
             return jsonify({"error": "An error occurred while fetching allocated books: " + str(e)}), 500
     else:
         return jsonify({"error": "Unauthorized access"}), 401
+
 
 @app.route('/api/fetch/section/books', methods=['POST'])
 @jwt_required()
@@ -889,7 +901,137 @@ def delete_book():
             return jsonify({"error": "An error occurred while deleting the book: " + str(e)}), 500
     else:
         return jsonify({"error": "Unauthorized access"}), 401
+    
 
+@app.route('/api/revoke/book', methods=['POST'])
+@jwt_required()
+def revoke_book():
+    current_user_id = get_jwt_identity()
+    user = verify_user_role(current_user_id, 'librarian')
+    data = request.json
+    allocation_id = data.get('allocation_id')
+    book_id = data.get('book_id')
+    user_id = data.get('user_id')
+
+    if user:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                DELETE FROM books_allocation WHERE id = ? AND user_id = ?
+            ''', (allocation_id, user_id))
+            
+            cursor.execute('''
+                UPDATE user_books SET returned = 1, return_date = ? 
+                WHERE user_id = ? AND book_id = ?
+            ''', (datetime.now().strftime('%Y-%m-%d'), user_id, book_id))
+
+            conn.commit()
+            conn.close()
+
+            return jsonify({"message": "Book returned successfully"}), 200
+        except Exception as e:
+            conn.rollback()
+            conn.close()
+            return jsonify({"error": "An error occurred while returning the book: " + str(e)}), 500
+    else:
+        return jsonify({"error": "Unauthorized access"}), 401
+    
+
+@app.route('/api/fetch/librarian/books', methods=['GET'])
+@jwt_required()
+def fetch_all_books():
+    current_user_id = get_jwt_identity()
+    user = verify_user_role(current_user_id, 'librarian')
+    
+    if user:
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT b.id AS book_id, 
+                       b.name AS book_name, 
+                       b.authors AS authors, 
+                       s.name AS section_name,
+                       CASE 
+                           WHEN ba.is_allocated = 1 THEN 'allocated'
+                           WHEN ba.is_requested = 1 THEN 'requested'
+                           ELSE 'available' 
+                       END AS status
+                FROM books AS b
+                LEFT JOIN (
+                    SELECT book_id,
+                           MAX(CASE WHEN is_allocated = 1 THEN 1 ELSE 0 END) AS is_allocated,
+                           MAX(CASE WHEN is_requested = 1 THEN 1 ELSE 0 END) AS is_requested
+                    FROM books_allocation
+                    GROUP BY book_id
+                ) AS ba ON b.id = ba.book_id
+                LEFT JOIN section_books AS sb ON b.id = sb.book_id
+                LEFT JOIN sections AS s ON sb.section_id = s.id
+            ''')
+            books = cursor.fetchall()
+            conn.close()
+
+            books_list = []
+            for book in books:
+                books_list.append({
+                    'book_id': book['book_id'],
+                    'book_name': book['book_name'],
+                    'authors': book['authors'],
+                    'section_name': book['section_name'],
+                    'status': book['status']
+                })
+
+            return jsonify(books_list), 200
+        except Exception as e:
+            return jsonify({"error": "An error occurred while fetching books: " + str(e)}), 500
+    else:
+        return jsonify({"error": "Unauthorized access"}), 401
+
+@app.route('/api/books/issued-count', methods=['GET'])
+def books_issued_count():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT date_of_issue, COUNT(*) AS issued_count
+        FROM user_books
+        GROUP BY date_of_issue
+    ''')
+    issued_count_data = cursor.fetchall()
+    conn.close()    
+
+    issued_count_list = []
+    for entry in issued_count_data:
+        issued_count_list.append({
+            'date_of_issue': entry['date_of_issue'],
+            'issued_count': entry['issued_count']
+        })
+
+    return jsonify(issued_count_list), 200
+    
+
+@app.route('/api/books-per-section', methods=['GET'])
+def books_per_section():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT sections.name AS section_name, COUNT(*) AS books_count
+        FROM section_books
+        INNER JOIN sections ON section_books.section_id = sections.id
+        GROUP BY section_books.section_id
+    ''')
+    books_per_section_data = cursor.fetchall()
+    conn.close()
+
+    books_per_section_list = []
+    for entry in books_per_section_data:
+        books_per_section_list.append({
+            'section_name': entry['section_name'],
+            'books_count': entry['books_count']
+        })
+
+    return jsonify(books_per_section_list), 200
 
 if __name__ == '__main__':
     create_predefined_roles()

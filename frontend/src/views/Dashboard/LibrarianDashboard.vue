@@ -94,13 +94,17 @@
       </div>
     </div>
 
+    <div class="search-section container mt-4">
+      <input type="text" v-model="searchQuery" placeholder="Search sections..." class="form-control">
+    </div>
+
     <div class="display-sections">
       <h3>All Sections</h3>
       <div class="section-cards">
         <div
           class="card"
           style="width: 18rem"
-          v-for="section in sections"
+          v-for="section in filteredSections"
           :key="section.id"
         >
           <div class="card-body">
@@ -260,18 +264,25 @@ export default {
         content: "",
         section: "",
       },
+      searchQuery: "", // Data property to hold search query
     };
   },
   mounted() {
     this.fetchSections();
   },
+  computed: {
+    // Filter sections based on search query
+    filteredSections() {
+      return this.sections.filter(section =>
+        section.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+  },
   methods: {
     saveSection() {
       this.newSection.title = DOMPurify.sanitize(this.newSection.title);
       this.newSection.date = DOMPurify.sanitize(this.newSection.date);
-      this.newSection.description = DOMPurify.sanitize(
-        this.newSection.description
-      );
+      this.newSection.description = DOMPurify.sanitize(this.newSection.description);
       axios
         .post("http://127.0.0.1:5000/api/add/new-section", this.newSection, {
           headers: {
@@ -302,7 +313,7 @@ export default {
         })
         .then((response) => {
           this.sections = response.data;
-          // console.log(this.sections); //[ {date_created: '2024-02-21', description: 'The history of the OriGinal History.', id: 1, name: 'History OG'}]
+          console.log(this.sections);
         })
         .catch((error) => {
           console.error("Error fetching sections:", error);
@@ -331,7 +342,6 @@ export default {
       .catch((error) => {
         console.error("Error adding book:", error);
       });
-
     },
     setSection(sectionName) {
       this.newBook.section = sectionName;
@@ -378,5 +388,9 @@ export default {
   display: flex;
   justify-content: space-between;
   gap: 10px;
+}
+
+.search-section {
+  margin-bottom: 20px;
 }
 </style>

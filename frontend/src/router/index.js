@@ -13,6 +13,8 @@ import AllBooks from "../components/User/AllBooks.vue"
 import MyBooks from "../components/User/MyBooks.vue"
 import BooksRequested from "../views/Librarian/BooksRequested.vue"
 import AllocatedBooks from "../views/Librarian/AllocatedBooks.vue"
+import AvailaibleBooks from '../views/Librarian/AvailaibleBooks.vue'
+import StatsSection from '../views/Librarian/StatsSection.vue'
 
 const routes = [
     {
@@ -195,6 +197,41 @@ const routes = [
                 next();
             }
         }
+    },
+    {
+        path: "/librarian/dashboard/availaiblebooks",
+        name: "AvailaibleBooks",
+        component: AvailaibleBooks,
+        meta: {
+            title: "Availaible Books | LMS"
+        },
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            const role = localStorage.getItem('userType');
+            if (!accessToken || role !== "librarian") {
+                next({ name: 'Home' });
+            } else {
+                next();
+            }
+        }
+    },
+    {
+        path: "/librarian/dashboard/stats",
+        name: "StatsSection",
+        component: StatsSection,
+        meta: {
+            title: "Status Section | LMS"
+        },
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            const role = localStorage.getItem('userType');
+            if (!accessToken || role !== "librarian") {
+                next({ name: 'Home' });
+            } else {
+                next();
+            }
+        }
+    
     }
 ]
 

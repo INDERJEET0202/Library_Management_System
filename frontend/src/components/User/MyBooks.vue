@@ -22,19 +22,32 @@
                     <td>{{ book.book_title }}</td>
                     <td>{{ book.author }}</td>
                     <td>{{ book.section }}</td>
-                    <button
-                      type="button"
-                      class="btn btn-warning"
-                      @click="
-                        returnBook(
-                          book.allocation_id,
-                          book.book_id,
-                          book.userId
-                        )
-                      "
-                    >
-                      Return
-                    </button>
+                    <td class="ano">
+                      <button
+                        type="button"
+                        class="btn"
+                        style="background-color: rgb(12, 183, 0);"
+                        @click="
+                          readBook(book.content)
+                        "
+                      >
+                        Read
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-warning"
+                        
+                        @click="
+                          returnBook(
+                            book.allocation_id,
+                            book.book_id,
+                            book.userId
+                          )
+                        "
+                      >
+                        Return
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -68,14 +81,16 @@
                     <td>{{ book.book_title }}</td>
                     <td>{{ book.author }}</td>
                     <td>{{ book.section }}</td>
-                    <button
-                      type="button"
-                      class="btn btn-primary"
-                      data-bs-toggle="modal"
-                      data-bs-target="#staticBackdrop"
-                    >
-                      Feedback
-                    </button>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop"
+                      >
+                        Feedback
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -94,7 +109,7 @@
                   <div class="modal-content">
                     <div class="modal-header">
                       <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                        Modal title
+                        Please leave a feedback
                       </h1>
                       <button
                         type="button"
@@ -131,12 +146,18 @@
                     <div class="modal-footer">
                       <button
                         type="button"
-                        class="btn btn-secondary"
+                        class="btn"
+                        style="background-color: rgb(213, 0, 0);"
                         data-bs-dismiss="modal"
                       >
                         Close
                       </button>
-                      <button type="button" class="btn btn-primary" @click="handleSubmitFeedback()">
+                      <button
+                        type="button"
+                        class="btn"
+                        style="background-color: rgb(12, 183, 0);"
+                        @click="handleSubmitFeedback()"
+                      >
                         Submit
                       </button>
                     </div>
@@ -231,9 +252,15 @@ export default {
         console.error("Error fetching returned books:", error);
       }
     },
-    async handleSubmitFeedback(){
+    async readBook(content) {
+      console.log(content);
+      const linkUrl = content;
+      window.open(linkUrl, "_blank");
+    },
+    async handleSubmitFeedback() {
       console.log(this.rating, this.comments);
-    }
+      alert("Feedback submitted successfully \nThank you!");
+    },
   },
   mounted() {
     this.fetchMyBooks();
@@ -258,5 +285,12 @@ export default {
 
 .btn:hover {
   background-color: #ff4500;
+}
+
+.ano{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 </style>
