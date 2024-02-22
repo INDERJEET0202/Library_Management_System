@@ -17,13 +17,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <router-link to="/user/dashboard" class="nav-link" activeClassName="active">Home</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">My Books</a>
+              <router-link to="/user/dashboard/my-books" class="nav-link" activeClassName="active">My Books</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Books</a>
+              <router-link to="/user/dashboard/all-books" class="nav-link" activeClassName="active">All Books</router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Stats</a>

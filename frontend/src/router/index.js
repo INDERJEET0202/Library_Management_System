@@ -7,6 +7,10 @@ import UserDashboard from "../views/Dashboard/UserDashboard.vue"
 import NotFound from "../views/NotFound/NotFound.vue"
 import AdminLogin from "../views/Admin/AdminLogin.vue"
 import AdminPage from "../views/Admin/AdminPage.vue"
+import LibrarianDashboard from "../views/Dashboard/LibrarianDashboard.vue"
+import SectionPage from "../views/Sections/SectionPage.vue"
+import AllBooks from "../components/User/AllBooks.vue"
+import MyBooks from "../components/User/MyBooks.vue"
 
 const routes = [
     {
@@ -36,6 +40,14 @@ const routes = [
         component: LibrarianLogin,
         meta: {
             title: "Librarian Login | LMS"
+        },
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            if (accessToken) {
+                next({ name: 'LibrarianPage' });
+            } else {
+                next();
+            }
         }
     },
     {
@@ -58,6 +70,18 @@ const routes = [
         path: "/user/dashboard",
         name: "UserDashboard",
         component: UserDashboard,
+        children: [
+            {
+                path: '/user/dashboard/all-books',
+                name: 'AllBooks',
+                component: AllBooks,
+            },
+            {
+                path: 'my-books',
+                name: 'MyBooks',
+                component: MyBooks,
+            }
+        ],
         meta: {
             title: "User Dashboard | LMS"
         },
@@ -100,7 +124,40 @@ const routes = [
                 next();
             }
         }
-    }
+    },
+    {
+        path: "/librarian/dashboard",
+        name: "LibrarianPage",
+        component: LibrarianDashboard,
+        meta: {
+            title: "Librarian Dashboard | LMS"
+        },
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) {
+                next({ name: 'Home' });
+            } else {
+                next();
+            }
+        }
+    },
+    {
+        path: "/librarian/dashboard/viewsection/:id/:name",
+        name: "SectionPage",
+        component: SectionPage,
+        meta: {
+            title: "Section Page | LMS"
+        },
+        props: true,
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) {
+                next({ name: 'Home' });
+            } else {
+                next();
+            }
+        }
+    },
 ]
 
 const router = createRouter({

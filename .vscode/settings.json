@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "adminlogin",
         "axios",
         "bcryptjs",
         "dompurify",
@@ -8,6 +9,7 @@
         "lastrowid",
         "librarianlogin",
         "userlogin",
-        "usersignup"
+        "usersignup",
+        "viewsection"
     ]
 }

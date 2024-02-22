@@ -95,6 +95,7 @@ export default {
         }
       } catch (error) {
         console.error("Error fetching users:", error);
+        this.errorMessage = "Session expired. Please login again.";
       }
     },
     async updateUserRole(user) {
@@ -146,6 +147,10 @@ export default {
 </script>
 
 <style>
+.container{
+  width: 60%;
+}
+
 .container-fluid {
   display: flex;
   justify-content: space-between;
@@ -171,5 +176,11 @@ export default {
 
 .delete_btn:hover {
   background-color: rgb(188, 188, 188);
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
 }
 </style>
