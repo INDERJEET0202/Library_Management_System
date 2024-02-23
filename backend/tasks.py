@@ -1,11 +1,12 @@
 from celery_config import celery
-from get_all_users import get_inactive_users
+from jobs.get_all_users import get_inactive_users
 import json
 import os
 from email.message import EmailMessage
 import ssl
 import smtplib
-from create_user_report import create_pdf_of_users
+from jobs.create_user_report import create_pdf_of_users
+from jobs.get_user_email_by_id import get_user_email_by_id
 
 
 def send_email(to_email, subject, body):
@@ -41,7 +42,7 @@ def send_activity_report_as_email():
     for filename in os.listdir(folder_path):
         if filename.endswith(".pdf"):
             user_id = filename.split(".")[0]
-            user_email = get_user_email_by_id(user_id)  # Implement this function to retrieve user email from database
+            user_email = get_user_email_by_id(user_id) 
             subject = f"Your Activity Report from National Library"
             body = f"Please find your activity report attached."
             attachment_path = os.path.join(folder_path, filename)
@@ -98,6 +99,6 @@ def create_pdf():
         print("Running create_pdf...")
         create_pdf_of_users()
         send_activity_report_as_email()
-        print("Task completed.")
+        print("Activity Email sent.")
     except Exception as e:
         print(f"Error in create_pdf: {e}")

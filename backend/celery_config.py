@@ -18,6 +18,6 @@ celery.conf.beat_schedule = {
     },
     'create-pdf-of-users': {
         'task': 'tasks.create_pdf',
-        'schedule': crontab(minute=0, hour=0),
+        'schedule': timedelta(minutes=1),
     },
 }
