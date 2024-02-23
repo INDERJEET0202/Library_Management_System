@@ -10,20 +10,48 @@
         </div>
         <div class="button">
           <button
-            v-if="book.allocated !== 1"
+            v-if="book.allocated === 1 && book.read === 1"
             type="button"
-            class="btn"
-            :class="{ 'btn-warning': book.requested === 1 }"
+            class="btn btn-completed"
+          >
+            Completed
+          </button>
+          <button
+            v-else-if="book.allocated === 1 && book.read === 0"
+            type="button"
+            class="btn btn-warning"
+          >
+            Already Allocated
+          </button>
+          <button
+            v-else-if="book.requested === 1"
+            type="button"
+            class="btn btn-warning"
+          >
+            Already Requested
+          </button>
+          <button
+            v-else-if="book.allocated === 0 && book.read === 0"
+            type="button"
+            class="btn btn-primary"
             @click="handleRequest(book.id, book.section)"
           >
-            {{ book.requested === 1 ? 'Already Requested' : 'Request' }}
+            Request
           </button>
-          <span v-else>Already Allocated</span>
+          <button
+            v-else-if="book.read === 1"
+            type="button"
+            class="btn btn-completed"
+          >
+            Completed
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+
 
 
 
@@ -131,5 +159,13 @@ export default {
 
 .btn-warning:hover {
   background-color: rgba(255, 221, 0, 0.9);
+}
+
+.btn-completed{
+  background-color: rgba(0, 255, 0, 0.719);
+  color: black;
+  pointer-events: none; 
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 </style>

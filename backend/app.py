@@ -523,12 +523,17 @@ def get_all_books():
                 CASE 
                     WHEN ba.is_requested = 1 AND ba.user_id = ? THEN 1
                     ELSE 0
-                END as requested
+                END as requested,
+                CASE
+                    WHEN ub.returned = 1 THEN 1
+                    ELSE 0
+                END as read
                 FROM books
                 INNER JOIN section_books ON books.id = section_books.book_id
                 INNER JOIN sections ON section_books.section_id = sections.id
                 LEFT JOIN books_allocation ba ON books.id = ba.book_id
-            ''', (current_user_id,))
+                LEFT JOIN user_books ub ON books.id = ub.book_id AND ub.user_id = ?
+            ''', (current_user_id, current_user_id))
             books = cursor.fetchall()
             conn.close()
 
@@ -544,7 +549,8 @@ def get_all_books():
                     'rating': book['rating'],
                     'section': book['section_name'],
                     'allocated': book['allocated'],
-                    'requested': book['requested']
+                    'requested': book['requested'],
+                    'read': book['read']
                 })
 
             return jsonify(books_list), 200
