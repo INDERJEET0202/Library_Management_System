@@ -10,27 +10,30 @@ This repository contains a Library Management System (LMS) designed to facilitat
 - **Technology Stack**: Frontend built with Vue3, backend with Flask, and SQLite3 for the database.
 - **Scheduled Tasks**: Celery manages scheduled jobs like sending reminders and monthly activity reports.
 - **Data Caching**: Redis is utilized for efficient data caching, enhancing performance.
-  
+
 ## Getting Started
 
 Follow these steps to set up and run the application:
 
-1. **Frontend Setup**: 
+1. **Frontend Setup**:
+
    - Navigate to the `frontend` directory and run `npm init`.
-    - Run `npm run serve` to start the frontend server at `http://localhost:8080/
-    - To build the frontend, run `npm run build` and copy the contents of the `dist` directory to `backend/static/
+   - Run `npm run serve` to start the frontend server at `http://localhost:8080/
+   - To build the frontend, run `npm run build`
 
 2. **Backend Setup**:
-   - Execute `scripts/start_celery.sh` and `scripts/start_redis.sh`.
-   - Create a virtual environment and install dependencies from `requirements.txt`.
-   - Run `python3 app.py` to start the backend server.
 
-For detailed instructions, refer to the documentation in each directory.
+    - Navigate to the `backend` directory and set up the environment.
+    - Execute `scripts/start_celery.sh` and `scripts/start_redis.sh`.
+    - Create a virtual environment and install dependencies from `requirements.txt`.
+    - Run `python3 app.py` to start the backend server.
+
+For detailed instructions, refer to the documentation of each sections.
 
 ## Contributors
 
-- [Your Name]
-- [Your Email]
+    <!-- - [Your Name]
+    - [Your Email] -->
 
 ## License
 
