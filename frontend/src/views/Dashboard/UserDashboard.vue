@@ -16,6 +16,7 @@
 
 <script>
 import UserNavbar from "../../components/UserNavbar/UserNavbar.vue";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -26,8 +27,23 @@ export default {
   components: {
     UserNavbar,
   },
+  methods: {
+    async setUsersLastVisitTime(){
+      const response = await axios.post("http://127.0.0.1:5000/api/track-last-login" ,{}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        }
+      })
+      if (response.status === 200) {
+        console.log("Last login time updated: ", response.data);
+      } else {
+        console.error("Failed to update last login time: ", response.data.error);
+      }
+    }
+  },
   mounted() {
     this.userName = JSON.parse(localStorage.getItem("user"));
+    this.setUsersLastVisitTime();
   },
 };
 </script>

@@ -47,6 +47,8 @@ def create_tables():
         )
     ''')
 
+    # cursor.execute('''ALTER TABLE users ADD COLUMN last_visited TEXT''')
+
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS roles (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -145,6 +147,15 @@ def create_predefined_roles():
     conn.commit()
     conn.close()
 
+def update_last_visited(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE users SET last_visited = ? WHERE id = ?
+    ''', (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), user_id))
+    conn.commit()
+    conn.close()
+
 # def assign_admin_role(user_id):
 #     conn = get_db_connection()
 #     cursor = conn.cursor()
@@ -189,6 +200,17 @@ def verify_user_role(user_id, role_name):
 @app.route('/')
 def hello():
     return 'Hello from backend!'
+
+@app.route('/api/track-last-login', methods=['POST'])
+@jwt_required()
+def track_last_login():
+    try:
+        current_user_id = get_jwt_identity()
+        update_last_visited(current_user_id)
+        return jsonify({"message": "Last login date updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/signup', methods=['POST'])
 def signup():
@@ -1032,6 +1054,80 @@ def books_per_section():
         })
 
     return jsonify(books_per_section_list), 200
+
+@app.route('/api/books/update', methods=['PUT'])
+@jwt_required()
+def update_book():
+    current_user_id = get_jwt_identity()
+    user = verify_user_role(current_user_id, 'librarian')
+    if not user:
+        return jsonify({"error": "Unauthorized access"}), 401
+    try:
+        book_data = request.json
+        book_id = book_data.get('book_id')
+        book_name = book_data.get('book_name')
+        author = book_data.get('author')
+        print(book_id, book_name, author)
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE books
+            SET name = ?, authors = ?
+            WHERE id = ?
+        ''', (book_name, author, book_id,))
+        conn.commit()
+        conn.close()
+        
+        return jsonify({"message": "Book updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": "Failed to update book: " + str(e)}), 500
+
+
+@app.route('/api/books/allocated-by-user', methods=['GET'])
+@jwt_required()
+def get_users_allocated_sections():
+    current_user_id = get_jwt_identity()
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT name FROM users WHERE id = ?', (current_user_id,))
+        current_user_name = cursor.fetchone()
+        if not current_user_name:
+            return jsonify({"error": "User not found"}), 404
+
+        current_user_name = current_user_name['name']
+
+        # Fetch allocated sections and the count of books in each section
+        cursor.execute('''
+            SELECT s.id as section_id, s.name as section_name, COUNT(ub.book_id) as books_count
+            FROM sections s
+            LEFT JOIN section_books sb ON s.id = sb.section_id
+            LEFT JOIN user_books ub ON sb.book_id = ub.book_id
+            WHERE ub.user_id = ?
+            GROUP BY s.id, s.name
+        ''', (current_user_id,))
+        sections_info = cursor.fetchall()
+
+        # Convert rows to dictionaries
+        sections_info_dict = [{'section_id': row['section_id'], 'section_name': row['section_name'], 'books_count': row['books_count']} for row in sections_info]
+
+        user_info = {
+            'user_id': current_user_id,
+            'user_name': current_user_name,
+            'allocated_sections': sections_info_dict
+        }
+
+        conn.close()
+
+        return jsonify(user_info), 200
+
+    except Exception as e:
+        return jsonify({"error": "An error occurred while fetching user allocated sections: " + str(e)}), 500
+
+
+
 
 if __name__ == '__main__':
     create_predefined_roles()

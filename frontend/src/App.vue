@@ -15,7 +15,6 @@ export default {
   },
   computed: {
     isAppPage() {
-      // Check if the current route corresponds to the App.vue page
       return this.$route.name === 'App';
     },
   },

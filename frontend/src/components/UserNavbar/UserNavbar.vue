@@ -26,7 +26,7 @@
               <router-link to="/user/dashboard/all-books" class="nav-link" activeClassName="active">All Books</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Stats</a>
+              <router-link to="/user/dashboard/all-stats" class="nav-link" activeClassName="active">Stats</router-link>
             </li>
           </ul>
           <form class="d-flex" role="search">

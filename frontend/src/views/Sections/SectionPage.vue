@@ -42,13 +42,100 @@
                       <tr v-for="book in books" :key="book.book_id">
                         <td>{{ book.book_name }}</td>
                         <td>{{ book.author }}</td>
-                        <button
-                          type="button"
-                          class="btn delete btn-danger center"
-                          @click="deleteBook(book.book_id)"
-                        >
-                          Delete
-                        </button>
+                        <td>
+                          <div class="buttons">
+                            <button
+                              type="button"
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop1"
+                              @click="editBook(book)"
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              class="btn delete btn-danger center"
+                              @click="deleteBook(book.book_id)"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                          <!-- Modal -->
+                          <div
+                            class="modal fade"
+                            id="staticBackdrop1"
+                            data-bs-backdrop="static"
+                            data-bs-keyboard="false"
+                            tabindex="-1"
+                            aria-labelledby="staticBackdropLabel"
+                            aria-hidden="true"
+                          >
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1
+                                    class="modal-title fs-5"
+                                    id="staticBackdropLabel"
+                                  >
+                                    Modal title
+                                  </h1>
+                                  <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                  ></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form @submit.prevent="updateBook">
+                                    <div class="mb-3">
+                                      <label
+                                        for="editBookName"
+                                        class="form-label"
+                                        >Book Name</label
+                                      >
+                                      <input
+                                        type="text"
+                                        class="form-control"
+                                        id="editBookName"
+                                        v-model="editBookData.book_name"
+                                        required
+                                      />
+                                    </div>
+                                    <div class="mb-3">
+                                      <label
+                                        for="editBookAuthor"
+                                        class="form-label"
+                                        >Author</label
+                                      >
+                                      <input
+                                        type="text"
+                                        class="form-control"
+                                        id="editBookAuthor"
+                                        v-model="editBookData.author"
+                                        required
+                                      />
+                                    </div>
+                                  </form>
+                                </div>
+                                <div class="modal-footer">
+                                  <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal"
+                                  >
+                                    Close
+                                  </button>
+                                  <button type="submit" class="btn btn-primary" @click="updateBook()">
+                                    Save Changes
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -75,6 +162,10 @@ export default {
   data() {
     return {
       books: [],
+      editBookData: {
+        book_name: "",
+        author: "",
+      },
     };
   },
   components: {
@@ -82,6 +173,37 @@ export default {
     AddBookModal,
   },
   methods: {
+    editBook(book) {
+      this.editBookData = {
+        book_id: book.book_id,
+        book_name: book.book_name,
+        author: book.author,
+      };
+      console.log(this.editBookData);
+    },
+    async updateBook() {
+      try {
+        const response = await axios.put(
+          `http://127.0.0.1:5000/api/books/update`,
+          this.editBookData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          console.log("Book updated: ", response.data);
+          alert("Book updated successfully!");
+          this.fetchSectionBooks();
+        } else {
+          console.error("Failed to update book: ", response.data.error);
+        }
+      } catch (error) {
+        console.error("Failed to update book: ", error.message);
+      }
+    },
     async fetchSectionBooks() {
       try {
         const response = await axios.post(
@@ -148,5 +270,12 @@ export default {
 
 .delete:hover {
   background-color: #aa0000;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
 }
 </style>
