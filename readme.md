@@ -2,6 +2,16 @@
 
 This repository contains a Library Management System (LMS) designed to facilitate efficient library operations. It offers distinct functionalities for users, librarians, and administrators.
 
+## About Project
+
+The Library Management System is a comprehensive application designed to streamline library operations efficiently. With distinct sections for users, librarians, and administrators, it offers a range of functionalities.
+
+Users can create accounts, request books, read allocated books, and access personalized activity statistics. Librarians have control over library inventory, including adding/deleting sections and books, managing user requests, and assigning/restricting book access. Administrators oversee user roles and permissions.
+
+Implemented with Vue3 for the frontend, Flask for the backend, and SQLite3 for the database, the system ensures smooth performance and reliability. Celery manages scheduled tasks such as sending reminders and activity reports, while Redis optimizes data caching for enhanced performance.
+
+To start the application, follow the provided instructions for both frontend and backend setup.
+
 ## Features
 
 - **User Section**: Users can create accounts, request books, read allocated books, view activity statistics, and search for books based on sections or titles.
@@ -32,9 +42,9 @@ For detailed instructions, refer to the documentation of each sections.
 
 ## Contributors
 
-    <!-- - [Your Name]
-    - [Your Email] -->
+    - [Indrajit (Me only)]
+    - [With the help of some resources like CHAT GPT, Stack Overflow, etc.]
 
 ## License
 
-This project is licensed under the [License Name] License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
