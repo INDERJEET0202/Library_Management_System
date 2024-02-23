@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">User Dashboard</a>
+        <router-link to="/user/dashboard" class="nav-link" activeClassName="active">User Dashboard</router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -17,7 +17,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link to="/user/dashboard" class="nav-link" activeClassName="active">Home</router-link>
+              <router-link to="/" class="nav-link" activeClassName="active">Home</router-link>
             </li>
             <li class="nav-item">
               <router-link to="/user/dashboard/my-books" class="nav-link" activeClassName="active">My Books</router-link>

@@ -39,7 +39,7 @@
             labels: labels,
             datasets: [
               {
-                label: "Sections Allocated",
+                label: "Books Read",
                 data: data,
                 backgroundColor: [
                   "rgba(255, 99, 132, 0.2)",
@@ -62,6 +62,12 @@
             ],
           },
           options: {
+            title:{
+              display: true,
+              text: 'Books Issued by Section',
+              fontSize: 20,
+              color: 'black'
+            },
             responsive: false,
             maintainAspectRatio: true,
           },

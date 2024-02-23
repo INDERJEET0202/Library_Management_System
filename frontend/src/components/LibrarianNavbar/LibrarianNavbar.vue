@@ -3,6 +3,7 @@
       <div class="container-fluid">
         <div class="elements">
           <router-link to="/librarian/dashboard" class="nav-link">Librarian Dashboard</router-link>
+          <router-link to="/" class="nav-link">Home</router-link>
         <router-link to="/librarian/dashboard/requestedbooks" class="nav-link">Requested Books</router-link>
         <router-link to="/librarian/dashboard/allocatedbooks" class="nav-link">Allocated Books</router-link>
         <router-link to="/librarian/dashboard/availaiblebooks" class="nav-link">Availaible Books</router-link>

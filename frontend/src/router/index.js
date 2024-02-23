@@ -16,6 +16,7 @@ import AllocatedBooks from "../views/Librarian/AllocatedBooks.vue"
 import AvailaibleBooks from '../views/Librarian/AvailaibleBooks.vue'
 import StatsSection from '../views/Librarian/StatsSection.vue'
 import AllStats from '../components/User/AllStats.vue'
+import UserHome from '../components/User/UserHome.vue'
 
 const routes = [
     {
@@ -90,6 +91,11 @@ const routes = [
                 path: 'all-stats',
                 name: 'AllStats',
                 component: AllStats,
+            },
+            {
+                path: '',
+                name: 'UserHome',
+                component: UserHome,
             }
         ],
         meta: {

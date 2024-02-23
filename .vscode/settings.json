@@ -1,14 +1,18 @@
 {
     "cSpell.words": [
         "adminlogin",
+        "allocatedbooks",
         "Availaible",
+        "availaiblebooks",
         "axios",
         "bcryptjs",
         "dompurify",
         "dont",
+        "dotenv",
         "jsonify",
         "lastrowid",
         "librarianlogin",
+        "mysecret",
         "requestedbooks",
         "userlogin",
         "usersignup",

@@ -6,13 +6,29 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from datetime import timedelta
 from flask import g
 from datetime import datetime
+from flask_caching import Cache
+from time import sleep
+from dotenv import load_dotenv
+import os
+# from celery_config import celery
 
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 app.config['JWT_SECRET_KEY'] = 'mysecret1234' 
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1) 
 jwt = JWTManager(app)
+
+app.config['CACHE_TYPE'] = 'redis'
+app.config['CACHE_REDIS_URL'] = os.environ.get('CACHE_REDIS_URL')
+
+
+cache = Cache(app)
+
+# celery.conf.update(app.config)
+
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -28,13 +44,12 @@ def close_connection(exception):
         db.close()
 
 
-# Function to connect to the SQLite database
+# Connect to db
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
-# Function to create tables in the database
 def create_tables():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -125,7 +140,6 @@ def create_tables():
         )
     ''')
 
-
     conn.commit()
     conn.close()
 
@@ -204,13 +218,14 @@ def hello():
 @app.route('/api/track-last-login', methods=['POST'])
 @jwt_required()
 def track_last_login():
+    # sleep(5) # NOTE checking weather caching is working or not
     try:
         current_user_id = get_jwt_identity()
         update_last_visited(current_user_id)
         return jsonify({"message": "Last login date updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+    
 
 @app.route('/api/signup', methods=['POST'])
 def signup():
@@ -488,6 +503,7 @@ def add_new_book():
         return jsonify({"error": "Unauthorized access"}), 401
 
 @app.route('/api/books', methods=['GET'])
+@cache.cached(timeout=120)
 @jwt_required()
 def get_all_books():
     current_user_id = get_jwt_identity()
@@ -962,6 +978,7 @@ def revoke_book():
     
 
 @app.route('/api/fetch/librarian/books', methods=['GET'])
+@cache.cached(timeout=120)
 @jwt_required()
 def fetch_all_books():
     current_user_id = get_jwt_identity()
