@@ -12,18 +12,36 @@ Implemented with Vue3 for the frontend, Flask for the backend, and SQLite3 for t
 
 To start the application, follow the provided instructions for both frontend and backend setup.
 
+## Tech Stack
+<img alt="Static Badge" src="https://img.shields.io/badge/Python-blue?style=plastic&logo=python&logoColor=yellow" height="25"> 
+<img alt="Static Badge" src="https://img.shields.io/badge/SQLite_3-brightgreen?style=plastic&logo=sqlite&logoColor=white" height="25">
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+<img alt="Static Badge" src="https://img.shields.io/badge/Flask_Security_too-black?style=plastic&logo=flask&logoColor=white" height="25">
+<img alt="Static Badge" src="https://img.shields.io/badge/Redis-%23ae1710?style=plastic&logo=redis&logoColor=white" height="25"> 
+<img alt="Static Badge" src="https://img.shields.io/badge/Celery-brightgreen?style=plastic&logo=celery&logoColor=black" height="25">
+<img alt="Static Badge" src="https://img.shields.io/badge/Messaging_Queues-orange?style=plastic&logo=stackexchange&logoColor=white" height="25">
+<img alt="Static Badge" src="https://img.shields.io/badge/Git-%23ae1710?style=plastic&logo=git&logoColor=white" height="25">
+<img alt="Static Badge" src="https://img.shields.io/badge/NPM-magenta?style=plastic&logo=npm&logoColor=white" height="25">
+<img alt="Static Badge" src="https://img.shields.io/badge/Javascript-yellow?style=plastic&logo=Javascript&logoColor=black" height="25">
+<img alt="Static Badge" src="https://img.shields.io/badge/VueJS-grey?style=plastic&logo=vue.js&logoColor=green" height="25">
+<img alt="Static Badge" src="https://img.shields.io/badge/REST_API-%23f4f8af?style=plastic&logo=academia&logoColor=purple" height="25">
+<img alt="Static Badge" src="https://img.shields.io/badge/Postman-white?style=plastic&logo=postman&logoColor=red" height="25">
+
 ## Features
 
 - **User Section**: Users can create accounts, request books, read allocated books, view activity statistics, and search for books based on sections or titles.
 - **Librarian Section**: Librarians can manage library inventory, add/delete sections and books, handle user requests, and assign/revoke book access.
 - **Admin Section**: Administrators can assign roles to users, granting them privileges as admins, librarians, or regular users.
 - **Technology Stack**: Frontend built with Vue3, backend with Flask, and SQLite3 for the database.
+- **RESTful API**: The system is equipped with a robust API, ensuring seamless communication between the frontend and backend.
+- **Authentication and Authorization**: User login and registration are secured with authentication and authorization using Flask JWT.
+- **Asynchronous Task Processing**: Celery is used for asynchronous task processing, ensuring efficient performance.
 - **Scheduled Tasks**: Celery manages scheduled jobs like sending reminders and monthly activity reports.
 - **Data Caching**: Redis is utilized for efficient data caching, enhancing performance.
 
 ## Getting Started
 
-Follow these steps to set up and run the application:
+Follow these steps to set up and run the application (make sure you have `npm` , `python3` and `redis` installed):
 
 1. **Frontend Setup**:
 
