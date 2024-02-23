@@ -141,8 +141,12 @@ export default {
           }
         );
 
+
         if (!response.ok) {
           throw new Error("Failed to revoke access");
+        }
+        else{
+          this.fetchRequestedBooks();
         }
 
         const data = await response.json();

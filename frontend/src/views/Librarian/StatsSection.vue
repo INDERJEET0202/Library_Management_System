@@ -149,12 +149,12 @@ export default {
       }
     },
   },
-  props: {
-    bookIssuedCount: {
-      type: Array,
-      required: true,
-    },
-  },
+  // props: {
+  //   bookIssuedCount: {
+  //     type: Array,
+  //     required: true,
+  //   },
+  // },
 };
 </script>
 

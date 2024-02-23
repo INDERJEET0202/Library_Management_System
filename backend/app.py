@@ -503,7 +503,7 @@ def add_new_book():
         return jsonify({"error": "Unauthorized access"}), 401
 
 @app.route('/api/books', methods=['GET'])
-@cache.cached(timeout=120)
+# @cache.cached(timeout=120)
 @jwt_required()
 def get_all_books():
     current_user_id = get_jwt_identity()
@@ -978,7 +978,7 @@ def revoke_book():
     
 
 @app.route('/api/fetch/librarian/books', methods=['GET'])
-@cache.cached(timeout=120)
+# @cache.cached(timeout=120)
 @jwt_required()
 def fetch_all_books():
     current_user_id = get_jwt_identity()
