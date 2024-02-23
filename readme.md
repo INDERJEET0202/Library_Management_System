@@ -16,7 +16,9 @@ This repository contains a Library Management System (LMS) designed to facilitat
 Follow these steps to set up and run the application:
 
 1. **Frontend Setup**: 
-   - Navigate to the `frontend` directory and run `npm run serve`.
+   - Navigate to the `frontend` directory and run `npm init`.
+    - Run `npm run serve` to start the frontend server at `http://localhost:8080/
+    - To build the frontend, run `npm run build` and copy the contents of the `dist` directory to `backend/static/
 
 2. **Backend Setup**:
    - Execute `scripts/start_celery.sh` and `scripts/start_redis.sh`.
