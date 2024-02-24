@@ -16,6 +16,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/librarianlogin">Librarian Login</a>
         </li>
+        <router-link to="/adminlogin" class="nav-link">Admin Login</router-link>
       </ul>
     </div>
   </div>

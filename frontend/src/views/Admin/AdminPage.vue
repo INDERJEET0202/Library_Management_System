@@ -75,6 +75,7 @@ export default {
     logout() {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("admin_name");
+      localStorage.removeItem("userType");
       this.$router.push("/adminlogin");
     },
     async getUsers() {

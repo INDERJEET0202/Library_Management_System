@@ -54,6 +54,7 @@ export default {
             if(response.data.access_token){
                 localStorage.setItem("accessToken", response.data.access_token);
                 localStorage.setItem("admin_name", response.data.admin_name);
+                localStorage.setItem("userType", "admin");
                 this.$router.push("/admin/dashboard");
             }
             } catch (error) {

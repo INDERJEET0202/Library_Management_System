@@ -124,6 +124,15 @@ const routes = [
         component: AdminLogin,
         meta: {
             title: "Admin Login | LMS"
+        },
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            const user = localStorage.getItem('userType')
+            if (!accessToken || user !== "admin") {
+                next({ name: 'Home' });
+            } else {
+                next();
+            }
         }
     },
     {
@@ -135,7 +144,8 @@ const routes = [
         },
         beforeEnter: (to, from, next) => {
             const accessToken = localStorage.getItem('accessToken');
-            if (!accessToken) {
+            const user = localStorage.getItem('userType')
+            if (!accessToken || user !== "admin") {
                 next({ name: 'Home' });
             } else {
                 next();
