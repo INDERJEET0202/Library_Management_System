@@ -12,7 +12,7 @@ celery.conf.update(
     broker_url=os.environ.get('CACHE_REDIS_URL'),
     result_backend=os.environ.get('CACHE_REDIS_URL'),
     include=['tasks'],  
-    result_expires=10
+    result_expires=120,
 )
 
 celery.conf.beat_schedule = {
