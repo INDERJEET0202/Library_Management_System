@@ -12,7 +12,7 @@ def send_email(to_email, subject, body):
     with open(secrets_file_path) as f:
         secrets = json.load(f)
 
-    sender_email = "palindrajit11@gmail.com"
+    sender_email = "senderemail@gmail.com"
     password = secrets.get('EMAIL_PASSWORD')
     receiver_email = to_email
 
@@ -34,4 +34,4 @@ def send_email(to_email, subject, body):
         print("Email sent successfully.")
 
 
-send_email("palindrajit10@gmail.com", "You have been inactive", "Please visit our site to keep your account active.")
+send_email("receiveremail@gmail.com", "You have been inactive", "Please visit our site to keep your account active.")

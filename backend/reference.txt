@@ -1,0 +1,2 @@
+Used redis.com for redis database
+url: https://app.redislabs.com/?_gl=1*bvln86*_gcl_au*MTk1NTEwMDI2NS4xNzA4NzYwMTUy*_ga*MTY2NjA5NTc2My4xNzA4NzYwMTUy*_ga_8BKGRQKRPV*MTcwODc2MDE1MS4xLjEuMTcwODc2MDM3OC45LjAuMA..#/subscriptions/subscription/2261850/bdb

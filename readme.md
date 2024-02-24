@@ -53,6 +53,7 @@ Follow these steps to set up and run the application (make sure you have `npm` ,
     - Navigate to the `backend` directory and set up the environment.
     - Execute `scripts/start_celery.sh` and `scripts/start_redis.sh`.
     - Create a virtual environment and install dependencies from `requirements.txt`.
+    - Create a `.env` file and add the required environment variables (for now only add the remote redis url).
     - Run `python3 app.py` to start the backend server.
 
 For detailed instructions, refer to the documentation of each sections.

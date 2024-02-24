@@ -1,12 +1,16 @@
 from celery import Celery
 from celery.schedules import crontab
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 celery = Celery(__name__)
 
 celery.conf.update(
-    broker_url='redis://localhost:6379/0',
-    result_backend='redis://localhost:6379/0',
+    broker_url=os.environ.get('CACHE_REDIS_URL'),
+    result_backend=os.environ.get('CACHE_REDIS_URL'),
     include=['tasks'],  
     result_expires=10
 )

@@ -22,7 +22,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
 jwt = JWTManager(app)
 
 app.config['CACHE_TYPE'] = 'redis'
-app.config['CACHE_REDIS_URL'] = os.environ.get('CACHE_REDIS_URL')
+app.config['CACHE_REDIS_URL'] = os.environ.get('CACHE_REDIS_URL') #redis enterprise url
 
 
 cache = Cache(app)
@@ -33,7 +33,7 @@ cache = Cache(app)
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = sqlite3.connect('database.db')
+        db = g._database = sqlite3.connect('./database/database.db')
         db.row_factory = sqlite3.Row
     return db
 
@@ -46,7 +46,7 @@ def close_connection(exception):
 
 # Connect to db
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('./database/database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -984,7 +984,7 @@ def revoke_book():
     
 
 @app.route('/api/fetch/librarian/books', methods=['GET'])
-# @cache.cached(timeout=120)
+@cache.cached(timeout=120)
 @jwt_required()
 def fetch_all_books():
     current_user_id = get_jwt_identity()

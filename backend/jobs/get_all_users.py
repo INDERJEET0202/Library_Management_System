@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime, timedelta
 
 def get_inactive_users():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('./database/database.db')
     cursor = conn.cursor()
 
     # Calculate the datetime one minute ago

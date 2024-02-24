@@ -8,10 +8,9 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 def create_pdf_of_users():
     def get_user_data():
-        conn = sqlite3.connect('database.db')  # Update with your database file path
+        conn = sqlite3.connect('./database/database.db')  
         cursor = conn.cursor()
 
-        # Query to get all users along with their issued books, sections, dates, and ratings
         cursor.execute('''
             SELECT u.id, u.name, u.email, 
                 COUNT(ub.book_id) AS books_issued,
@@ -65,18 +64,16 @@ def create_pdf_of_users():
 
     def generate_user_pdf(user_id, user_details, folder_path):
         details = user_details[user_id]
-        pdf_filename = f"{user_id}.pdf"  # Use user ID for the filename
+        pdf_filename = f"{user_id}.pdf"  
         pdf_path = os.path.join(folder_path, pdf_filename)
         doc = SimpleDocTemplate(pdf_path, pagesize=letter)
         elements = []
 
-        # Add heading
         styles = getSampleStyleSheet()
         heading = Paragraph(f"<b>Here is the Summary of your Activity, {details['name'] }</b>", styles['Title'])
         elements.append(heading)
-        elements.append(Table([['']]))  # Add some space
+        elements.append(Table([['']]))  
 
-        # Add user details to PDF
         user_details_table = Table([
             ['User ID:', user_id],
             ['Name:', details['name']],
