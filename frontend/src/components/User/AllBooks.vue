@@ -30,6 +30,13 @@
           >
             Already Requested
           </button>
+          <!-- <button
+            v-else-if="book.requested === 1 && book.read === 1 "
+            type="button"
+            class="btn btn-warning"
+          >
+            Already Requested
+          </button> -->
           <button
             v-else-if="book.allocated === 0 && book.read === 0"
             type="button"
@@ -45,12 +52,19 @@
           >
             Completed
           </button>
+          <button
+            v-if="book.read === 1"
+            type="button"
+            class="btn btn-request_again"
+            @click="handleRequest(book.id, book.section)"
+          >
+            Request Again
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 
 
 
@@ -101,6 +115,7 @@ export default {
           this.fetchBooks();
         })
         .catch((error) => {
+          alert(error.response.data.error)
           console.log(error);
         });
     },
@@ -167,5 +182,19 @@ export default {
   pointer-events: none; 
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.request_again{
+  background-color: rgba(0, 255, 0, 0.719);
+  color: black;
+  pointer-events: none; 
+  cursor: not-allowed;
+  opacity: 0.5;
+  margin-right: 5px;
+}
+
+.button{
+  display: flex;
+  gap: 10px;
 }
 </style>
