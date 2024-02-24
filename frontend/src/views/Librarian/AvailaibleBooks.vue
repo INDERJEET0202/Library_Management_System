@@ -47,6 +47,7 @@
 <script>
 import axios from "axios";
 import LibrarianNavbar from "../../components/LibrarianNavbar/LibrarianNavbar.vue";
+import { host } from "../../utils/APIRoutes.js";
 export default {
   name: "AvailableBooks",
   components: {
@@ -61,8 +62,10 @@ export default {
   methods: {
     async fetchAllBooks() {
       try {
+        console.log(process.env.NODE_ENV)
+        console.log(host)
         const response = await axios.get(
-          "http://127.0.0.1:5000/api/fetch/librarian/books",
+          `${host}/api/fetch/librarian/books`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
