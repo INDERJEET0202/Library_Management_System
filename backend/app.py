@@ -1152,13 +1152,13 @@ def get_users_allocated_sections():
 
 
 
-if __name__ == '__main__':
-    create_predefined_roles()
-    # targetUser = find_user_by_email_and_name("palindrajit10@gmail.com", "indrajit")
-    # if targetUser:
-    #     assign_admin_role(targetUser['id'])
-    #     print("Admin role assigned to user:", targetUser['name'])
-    # else:
-    #     print("No user found with such information [Note that the username and email is case sensitive].")
+# if __name__ == '__main__':
+#     create_predefined_roles()
+#     # targetUser = find_user_by_email_and_name("palindrajit10@gmail.com", "indrajit")
+#     # if targetUser:
+#     #     assign_admin_role(targetUser['id'])
+#     #     print("Admin role assigned to user:", targetUser['name'])
+#     # else:
+#     #     print("No user found with such information [Note that the username and email is case sensitive].")
 
-    app.run(debug=True)
+#     app.run(debug=True)
