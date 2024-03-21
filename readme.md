@@ -45,7 +45,7 @@ Follow these steps to set up and run the application (make sure you have `npm` ,
 1. **Frontend Setup**:
 
    - Navigate to the `frontend` directory and run `npm init`.
-   - Run `npm run serve` to start the frontend server at `http://localhost:8080/
+   - Run `npm run serve` to start the frontend server at `http://localhost:8080/`
    - To build the frontend, run `npm run build`
 
 2. **Backend Setup**:
